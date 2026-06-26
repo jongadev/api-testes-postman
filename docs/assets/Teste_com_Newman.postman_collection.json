@@ -1,0 +1,552 @@
+{
+  "info": {
+    "_postman_id": "254ff960-2707-45f1-9960-656a80ab1768",
+    "name": "Teste com Newman",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16151949"
+  },
+  "item": [
+    {
+      "name": "Validar cadastro de Produtos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Validar que o status code é 201",
+              "pm.test('Status code deve ser 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "// 2. Validar que a resposta contém um objeto \"data\"",
+              "pm.test('Resposta deve conter um objeto \"data\"', function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "});",
+              "",
+              "// 3. Validar que o produto foi criado com os dados corretos",
+              "pm.test('Produto deve conter todos os campos obrigatórios', function () {",
+              "    const jsonData = pm.response.json();",
+              "    const product = jsonData.data;",
+              "    ",
+              "    pm.expect(product).to.have.property('id');",
+              "    pm.expect(product).to.have.property('name');",
+              "    pm.expect(product).to.have.property('price');",
+              "    pm.expect(product).to.have.property('stock_quantity');",
+              "    pm.expect(product).to.have.property('sku');",
+              "    pm.expect(product).to.have.property('category_id');",
+              "    pm.expect(product).to.have.property('supplier_id');",
+              "});",
+              "",
+              "// 4. Validar que os dados enviados foram salvos corretamente",
+              "pm.test('Dados do produto devem corresponder aos dados enviados', function () {",
+              "    const jsonData = pm.response.json();",
+              "    const product = jsonData.data;",
+              "    ",
+              "    pm.expect(product.name).to.equal('Mouses RGGB');",
+              "    pm.expect(product.price).to.equal(299.9);",
+              "    pm.expect(product.stock_quantity).to.equal(50);",
+              "    pm.expect(product.sku).to.equal('MSSS-2027');",
+              "    pm.expect(product.category_id).to.equal(20);",
+              "    pm.expect(product.supplier_id).to.equal(10);",
+              "});",
+              "",
+              "// 5. Validar que campos padrão têm valores corretos",
+              "pm.test('Campos padrão devem ter valores corretos', function () {",
+              "    const jsonData = pm.response.json();",
+              "    const product = jsonData.data;",
+              "    ",
+              "    pm.expect(product.is_active).to.equal(true);",
+              "    pm.expect(product.is_featured).to.equal(false);",
+              "    pm.expect(product.discount_percentage).to.equal(0);",
+              "});",
+              "",
+              "// 6. Validar que o slug foi gerado corretamente",
+              "pm.test('Slug deve ser gerado corretamente', function () {",
+              "    const jsonData = pm.response.json();",
+              "    const product = jsonData.data;",
+              "    ",
+              "    pm.expect(product.slug).to.equal('mouses-rggb');",
+              "});",
+              "",
+              "// 7. Validar que a resposta contém um array \"mensagens\"",
+              "pm.test('Resposta deve conter um array \"mensagens\"', function () {",
+              "    const jsonData = pm.response.json();",
+              "    ",
+              "    pm.expect(jsonData).to.have.property('mensagens');",
+              "    pm.expect(jsonData.mensagens).to.be.an('array');",
+              "    pm.expect(jsonData.mensagens.length).to.be.greaterThan(0);",
+              "});",
+              "",
+              "// 8. Validar que timestamps estão presentes e são válidos",
+              "pm.test('Timestamps devem estar presentes e ser válidos', function () {",
+              "    const jsonData = pm.response.json();",
+              "    const product = jsonData.data;",
+              "    ",
+              "    pm.expect(product).to.have.property('created_at');",
+              "    pm.expect(product).to.have.property('updated_at');",
+              "    ",
+              "    // Validar que são strings de data válidas",
+              "    const createdAt = new Date(product.created_at);",
+              "    const updatedAt = new Date(product.updated_at);",
+              "    ",
+              "    pm.expect(createdAt).to.be.instanceof(Date);",
+              "    pm.expect(updatedAt).to.be.instanceof(Date);",
+              "    pm.expect(createdAt.getTime()).to.be.greaterThan(0);",
+              "    pm.expect(updatedAt.getTime()).to.be.greaterThan(0);",
+              "});",
+              "",
+              "// 9. Validar que campos numéricos têm os tipos corretos",
+              "pm.test('Campos numéricos devem ter tipos corretos', function () {",
+              "    const jsonData = pm.response.json();",
+              "    const product = jsonData.data;",
+              "    ",
+              "    pm.expect(product.id).to.be.a('number');",
+              "    pm.expect(product.price).to.be.a('number');",
+              "    pm.expect(product.stock_quantity).to.be.a('number');",
+              "    pm.expect(product.category_id).to.be.a('number');",
+              "    pm.expect(product.supplier_id).to.be.a('number');",
+              "    pm.expect(product.discount_percentage).to.be.a('number');",
+              "    pm.expect(product.rating).to.be.a('number');",
+              "    pm.expect(product.reviews_count).to.be.a('number');",
+              "});",
+              "",
+              "// 10. Validar que o produto está marcado como ativo",
+              "pm.test('Produto deve estar marcado como ativo', function () {",
+              "    const jsonData = pm.response.json();",
+              "    const product = jsonData.data;",
+              "    ",
+              "    pm.expect(product.is_active).to.be.true;",
+              "});",
+              "",
+              "// 11. Validar a estrutura completa da resposta",
+              "pm.test('Estrutura completa da resposta deve ser válida', function () {",
+              "    const jsonData = pm.response.json();",
+              "    ",
+              "    // Validar estrutura raiz",
+              "    pm.expect(jsonData).to.be.an('object');",
+              "    pm.expect(jsonData).to.have.all.keys('data', 'mensagens');",
+              "    ",
+              "    // Validar estrutura do objeto data",
+              "    const product = jsonData.data;",
+              "    const expectedKeys = ['id', 'category_id', 'supplier_id', 'name', 'slug', 'description', ",
+              "                         'short_description', 'price', 'cost_price', 'stock_quantity', ",
+              "                         'reorder_level', 'image_url', 'sku', 'barcode', 'weight', ",
+              "                         'is_active', 'is_featured', 'discount_percentage', 'rating', ",
+              "                         'reviews_count', 'views_count', 'sales_count', 'created_at', 'updated_at'];",
+              "    ",
+              "    expectedKeys.forEach(key => {",
+              "        pm.expect(product).to.have.property(key);",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"{{$randomLastName}}\",\r\n  \"price\": 45,\r\n  \"stock_quantity\": 50,\r\n  \"sku\": \"{{$randomAlphaNumeric}}\",\r\n  \"category_id\":20 ,\r\n  \"supplier_id\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/products",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validar cadastro de Fornecedor",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"company_name\": \"{{$randomCompanyName}}\",\n  \"contact_name\": \"{{$randomFullName}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"phone\": \"(11) 98765-4321\",\n  \"cnpj\": \"02345678901204\",\n  \"uf\": \"SP\"\n}",
+          "options": {
+            "raw": {
+              "headerFamily": "json",
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/suppliers",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "suppliers"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Fornecedor criado",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "description": "Added as a part of security scheme: bearer",
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"Tech Solutions Ltda\",\n  \"contact_name\": \"João Silva\",\n  \"email\": \"joao@techsolutions.com\",\n  \"phone\": \"(11) 98765-4321\",\n  \"cnpj\": \"12345678901234\",\n  \"uf\": \"SP\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "suppliers"
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"data\": {\n    \"id\": 7205,\n    \"company_name\": \"Tech Solutions Ltda\",\n    \"contact_name\": \"João Silva\",\n    \"email\": \"joao@techsolutions.com\",\n    \"phone\": \"(11) 98765-4321\",\n    \"cnpj\": \"12345678901234\",\n    \"uf\": \"SP\"\n  },\n  \"message\": \"string\"\n}"
+        },
+        {
+          "name": "Dados inválidos",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "description": "Added as a part of security scheme: bearer",
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"Tech Solutions Ltda\",\n  \"contact_name\": \"João Silva\",\n  \"email\": \"joao@techsolutions.com\",\n  \"phone\": \"(11) 98765-4321\",\n  \"cnpj\": \"12345678901234\",\n  \"uf\": \"SP\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "suppliers"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "Token ausente",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "description": "Added as a part of security scheme: bearer",
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"Tech Solutions Ltda\",\n  \"contact_name\": \"João Silva\",\n  \"email\": \"joao@techsolutions.com\",\n  \"phone\": \"(11) 98765-4321\",\n  \"cnpj\": \"12345678901234\",\n  \"uf\": \"SP\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "suppliers"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "Email ou CNPJ duplicado",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "description": "Added as a part of security scheme: bearer",
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"Tech Solutions Ltda\",\n  \"contact_name\": \"João Silva\",\n  \"email\": \"joao@techsolutions.com\",\n  \"phone\": \"(11) 98765-4321\",\n  \"cnpj\": \"12345678901234\",\n  \"uf\": \"SP\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "suppliers"
+              ]
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "text",
+          "header": [],
+          "cookie": [],
+          "body": ""
+        }
+      ]
+    },
+    {
+      "name": "Validar cadastro de categoria",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Validação 1: Status code é 201 (Created)",
+              "pm.test(\"Status code é 201 (Created)\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "// Validação 2: Campo \"name\" não está vazio",
+              "pm.test(\"Campo 'name' não está vazio\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('name');",
+              "    pm.expect(jsonData.data.name).to.not.be.empty;",
+              "});",
+              "",
+              "// Validação 3: Campo \"description\" não está vazio",
+              "pm.test(\"Campo 'description' não está vazio\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('description');",
+              "    pm.expect(jsonData.data.description).to.not.be.empty;",
+              "});",
+              "",
+              "// Validação 4: Campo \"is_active\" é true",
+              "pm.test(\"Campo 'is_active' é true\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('is_active');",
+              "    pm.expect(jsonData.data.is_active).to.be.true;",
+              "});",
+              "",
+              "// Validação 5: Mensagem \"Categoria criada com sucesso!\" está presente no array \"mensagens\"",
+              "pm.test(\"Mensagem 'Categoria criada com sucesso!' está presente no array 'mensagens'\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('mensagens');",
+              "    pm.expect(jsonData.mensagens).to.be.an('array');",
+              "    pm.expect(jsonData.mensagens).to.include('Categoria criada com sucesso!');",
+              "});",
+              "",
+              "// Validação 6: Campo \"id\" é um número positivo",
+              "pm.test(\"Campo 'id' é um número positivo\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('id');",
+              "    pm.expect(jsonData.data.id).to.be.a('number');",
+              "    pm.expect(jsonData.data.id).to.be.greaterThan(0);",
+              "});",
+              "",
+              "// Validação 7: Campo \"slug\" é uma string não vazia",
+              "pm.test(\"Campo 'slug' é uma string não vazia\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('slug');",
+              "    pm.expect(jsonData.data.slug).to.be.a('string');",
+              "    pm.expect(jsonData.data.slug).to.not.be.empty;",
+              "});",
+              "",
+              "// Validação 8: Campo \"created_at\" é uma data válida em formato ISO 8601",
+              "/*pm.test(\"Campo 'created_at' é uma data válida em formato ISO 8601\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('created_at');",
+              "    const iso8601Regex = /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{3})?Z?$/;",
+              "    pm.expect(jsonData.data.created_at).to.match(iso8601Regex);",
+              "    pm.expect(new Date(jsonData.data.created_at).getTime()).to.be.greaterThan(0);",
+              "});*/",
+              "",
+              "// Validação 9: Campo \"data\" é um objeto válido",
+              "pm.test(\"Campo 'data' é um objeto válido\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('data');",
+              "    pm.expect(jsonData.data).to.be.an('object');",
+              "    pm.expect(Object.keys(jsonData.data).length).to.be.greaterThan(0);",
+              "});",
+              "",
+              "// Validação 10: Array \"mensagens\" contém pelo menos 2 mensagens",
+              "pm.test(\"Array 'mensagens' contém pelo menos 2 mensagens\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('mensagens');",
+              "    pm.expect(jsonData.mensagens).to.be.an('array');",
+              "    pm.expect(jsonData.mensagens.length).to.be.at.least(2);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"{{$randomJobArea}}-{{$randomInt}}\",\n  \"description\": \"{{$randomLoremSentence}}\"\n}",
+          "options": {
+            "raw": {
+              "headerFamily": "json",
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseURL}}/categories",
+          "host": [
+            "{{baseURL}}"
+          ],
+          "path": [
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
