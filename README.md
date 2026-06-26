@@ -64,7 +64,10 @@ Publicação do projeto no GitHub com estrutura organizada e README profissional
 ## 📸 Evidências
 
 ### ✅ Collection Runner — Resultado dos Testes HTML
-![Runner](docs/assets/testes-runner.PNG)
+![Runner](docs/assets/testes-runner.png)
+
+### Relatório HTML - Newman htmlextra
+![Relatório HTML](docs/assets/testes-runner.png)
 
 ### 🧪 Testes Automatizados com Runner
 ![Postman Testes](docs/assets/postman-automation.PNG)
